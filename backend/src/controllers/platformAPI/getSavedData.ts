@@ -1,6 +1,5 @@
 import { Response, Request } from "express";
 import Platform from "../../models/platforms";
-import { DatabaseError } from "sequelize";
 
 
 export const getPlatFormData = async (request: Request, response: Response) => {

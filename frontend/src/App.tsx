@@ -8,7 +8,7 @@ function App() {
     <>
     <main>
     <Routes>
-    <Route path="/admin_single/:eventId" element={<LandingPage />} />
+    <Route path="/" element={<LandingPage />} />
     </Routes>
     </main>
     </>
