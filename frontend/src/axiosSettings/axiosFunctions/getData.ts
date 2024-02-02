@@ -8,3 +8,12 @@ export const getData = async()=>{
       return err.response;
     }
 }
+
+export const getSingleData = async(keyword:string)=>{
+  try {
+    const response = await axios.get(`platform/single?keyword=${keyword}`);
+    return response;
+  } catch (err: any) {
+    return err.response;
+  }
+}

@@ -2,12 +2,8 @@ import { useEffect, useState } from "react";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { getData } from "../../axiosSettings/axiosFunctions/getData";
 
-interface DropdownsProps {
-    onCurrencySelect: (selectedCurrency: any) => void;
-  }
 
-
-export const Dropdowns = ({ onCurrencySelect }: any)=>{
+export const Dropdowns = ({ onCurrencySelect, onLandingSelect }: any)=>{
     const [dropDownData, setDropDownData] = useState([])
     const [selectCurrency, setSelectCurrency] = useState<any>(null)
     const [isDropdownClicked, setIsDropdownClicked] = useState(false)
@@ -30,6 +26,7 @@ export const Dropdowns = ({ onCurrencySelect }: any)=>{
         const selectedCurrency = e.value
         setSelectCurrency(selectedCurrency)
         onCurrencySelect(selectedCurrency)
+        onLandingSelect(selectedCurrency)
     }
 
     const customOptionTemplate = (option: any) => {
@@ -42,7 +39,6 @@ export const Dropdowns = ({ onCurrencySelect }: any)=>{
       };
 
       const handleClick = (e: React.MouseEvent):void=>{
-        //   e.preventDefault()
         setIsDropdownClicked(true);
       }
       const handleBlur = ()=>{

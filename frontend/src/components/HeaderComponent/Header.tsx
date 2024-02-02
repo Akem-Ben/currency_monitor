@@ -3,15 +3,22 @@ import { Dropdowns } from "../Dropdown/Dropdown";
 import { InrDropdown } from "../InrDropDown/InrDropdown";
 import { GrSend } from "react-icons/gr";
 import pic from '../../assets/header/HODLINFO.png'
-import { getData } from "../../axiosSettings/axiosFunctions/getData";
+import { getData, getSingleData } from "../../axiosSettings/axiosFunctions/getData";
+import Counter from "../CountDown/Countdown";
+import { BsToggleOn } from "react-icons/bs";
+import { BsToggleOff } from "react-icons/bs";
 
-export const Header = () => {
+export const Header = ({onLandingSelect, isLightMode, toggleLightMode }:any) => {
   const [isDropdownClicked, setIsDropdownClicked] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState<any>("BTC");
+  const [currencyAmount, setCurrencyAmount] = useState("")
+  const [toggle, setToggle] = useState(false)
+  const [isLightingMode, setIsLightingMode] = useState(false);
+
 
   const handleCurrencySelect = (currency: any) => {
+    onLandingSelect(currency)
     setSelectedCurrency(currency);
-    // Do any additional processing if needed
   };
 
   const handleClick = () => {
@@ -23,32 +30,36 @@ export const Header = () => {
 
   const fetcInfo = async()=>{
     try{
-        const data = await getData()
-        console.log(selectedCurrency)
-        // const dropDownMenu = data.data.database_data.map((info:any)=>info.platform_base_unit.toUpperCase())
-        // return setDropDownData(dropDownMenu)
+        const data = await getSingleData(selectedCurrency.toLowerCase())
+        return setCurrencyAmount(data.data.data.platform_last_traded)
     }catch(error){
         console.log(error)
     }
 }
 
+const handleToggle = ()=>{
+  setToggle(!toggle)
+  toggleLightMode()
+  setIsLightingMode(!isLightingMode)
+}
+
 useEffect(()=>{
     fetcInfo()
-},[])
+},[selectedCurrency])
 
 
   return (
-    <div className="flex flex-col justify-center items-center text-[#818389]">
+    <div className={`flex flex-col justify-center items-center text-[#818389] ${isLightMode ? 'light-mode' : ''}`}>
       <section className="w-[100%] flex items-center justify-center">
         <div className="flex w-[100%] justify-between">
             <div className="w-[17%] h-[25%] mt-[1%]"><img src={pic} alt="logo" className="w-[100%] h-[100%]" /></div>
-        <div className="flex justify-between ml-[10%] p-[1%] w-[25%]">
+        <div className="flex h-[30%] justify-between ml-[10%] p-[1%] w-[25%]">
           <InrDropdown />
-          <Dropdowns onCurrencySelect={handleCurrencySelect} />
+          <Dropdowns onCurrencySelect={handleCurrencySelect} onLandingSelect={onLandingSelect} />
           <button
             onClick={handleClick}
             onBlur={handleBlur}
-            className={`w-[35%] font-Oswald h-[100%] rounded-[10px] text-white flex justify-center items-center pb-[3%] pt-[3%] bg-[#2E3241] ${
+            className={`w-[35%] font-Oswald h-[100%] rounded-[10px] bg-[#2E3241] text-white flex justify-center items-center pb-[3%] pt-[3%] ${
               isDropdownClicked
                 ? "border border-gray-700 border-2 bg-gray-500"
                 : ""
@@ -57,10 +68,16 @@ useEffect(()=>{
             BUY {selectedCurrency}
           </button>
         </div>
-        <div className=" flex items-center justify-around bg-red-500 w-[25%]">
-            <p>counter</p>
-            <button className="font-Oswald bg-[#6CCACB] justify-center items-center p-[2%] gap-[5%] w-[50%] text-white flex h-[55%] rounded-[10px]"><p className=" mt-[5px]"><GrSend /></p> <p>Connect Telegram</p></button>
-            <p>switch</p>
+        <div className="w-[30%] flex items-center justify-between">
+            <div className="w-[30%] flex justify-center"><Counter duration={60} /></div>
+            <div className="w-[50%] h-[55%]">
+            <button className="font-Oswald bg-[#6CCACB] justify-center items-center p-[2%] gap-[5%] w-[100%] text-white flex h-[100%] rounded-[10px]"><p className=" mt-[5px]"><GrSend /></p> <p>Connect Telegram</p></button>
+            </div>
+            <div className="h-[100%] flex ml-[1%] w-[30%] transition duration-1000 ease-in-out">
+            <button className={`h-[100%] flex justify-center items-center w-[100%]`} onClick={handleToggle}>
+              {toggle ? (<BsToggleOff className="w-[50%] h-[100%]"/>): (<BsToggleOn className="w-[50%] h-[100%]" />)}
+            </button>
+            </div>
         </div>
         </div>
       </section>
@@ -76,7 +93,7 @@ useEffect(()=>{
                 <p className="text-[20px]">1 Hour</p>
             </div>
             <div className="flex font-Oswald flex-col justify-center items-center">
-                <h1 className="text-[80px] text-white">₹40,90,90</h1>
+                <h1 className="text-[80px]" style={{color: `${isLightingMode ? "white" : "#191D28"}`}}>₹ {currencyAmount}</h1>
                 <p className="text-[16px]">Average {selectedCurrency}/INR net price including commission</p>
             </div>
             <div className="flex font-Oswald flex-col justify-center items-center">

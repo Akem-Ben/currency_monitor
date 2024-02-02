@@ -7,6 +7,8 @@ export const InrDropdown = ()=>{
     const [dropDownData, setDropDownData] = useState<any>(["INR"])
     const [selectCurrency, setSelectCurrency] = useState<any>(null)
     const [isDropdownClicked, setIsDropdownClicked] = useState(false)
+    const [isLightingMode, setIsLightingMode] = useState(false);
+
 
     const customOptionTemplate = (option: any) => {
         // Customize the option label as needed with Tailwind CSS classes
